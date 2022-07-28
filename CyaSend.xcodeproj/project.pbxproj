@@ -440,6 +440,10 @@
 				DEVELOPMENT_TEAM = 2SRF5TLB8K;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CyaSend/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Used to send data to remote computer to unlock";
+				INFOPLIST_KEY_NSHumanReadableCopyright = l;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -468,6 +472,10 @@
 				DEVELOPMENT_TEAM = 2SRF5TLB8K;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CyaSend/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Used to send data to remote computer to unlock";
+				INFOPLIST_KEY_NSHumanReadableCopyright = l;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

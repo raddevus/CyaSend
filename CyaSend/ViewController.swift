@@ -15,6 +15,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     @IBOutlet var sendDataButton : UIButton!
     var currentPeripheral : CBPeripheral!
     var centralManager : CBCentralManager?
+    var dataToSend : String = ""
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         if (central.state == .poweredOn){
@@ -50,12 +51,66 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     
     @IBAction func SendKeys(_ sender : UIButton){
         let noClipboard = "No Clipboard Data"
-        outputMessages.text += " \((UIPasteboard.general.string ?? noClipboard))\n"
+        dataToSend = "\((UIPasteboard.general.string ?? noClipboard))"
+        
+        if (dataToSend == noClipboard){
+            outputMessages.text += "No data to send. Try again!\n"
+            return
+        }
+        outputMessages.text += "\(dataToSend)\n"
+        if (currentPeripheral != nil){
+            centralManager?.connect(currentPeripheral, options: nil)
+        }
+    }
+    
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
+        
+        if let error = error {
+            outputMessages.text += "Error discovering service characteristics: \(error.localizedDescription)\n"
+        }
+        
+        service.characteristics?.forEach({ characteristic in
+            if let descriptors = characteristic.descriptors {
+                outputMessages.text += "DESCRIPTORS \(descriptors)\n"
+            }
+            let outString = dataToSend
+            var data = outString.data(using: String.Encoding.ascii)
+           
+            for characteristic in service.characteristics! as [CBCharacteristic]{
+                if(characteristic.uuid.uuidString == "FFE1")
+                {
+                    if (peripheral.state.rawValue == 2){
+                        outputMessages.text += "SENDING data\n"
+                        peripheral.writeValue(data ?? Data(),
+                                          for: characteristic,
+                                          type: CBCharacteristicWriteType.withoutResponse)
+                    }
+                }
+                else if (characteristic.uuid.uuidString == "2A19") {
+                    outputMessages.text += "writing data...\n"
+                    peripheral.writeValue(data ?? Data() ,
+                                          for: characteristic,
+                                          type: CBCharacteristicWriteType.withoutResponse)
+                }
+                else{
+                    outputMessages.text += "uuid :  \(characteristic.uuid.uuidString)\n"
+                }
+            }
+            outputMessages.text += "CHARACTERISTIC : \(characteristic.uuid.uuidString)\n"
+            outputMessages.text += "\(characteristic.properties)\n"
+            
+        })
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+            self.disconnectFromDevice(peripheral)    })
+    }
+    
+    func disconnectFromDevice (_ peripheral: CBPeripheral ) {
+        centralManager?.cancelPeripheralConnection(peripheral)
     }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         // We only care about 1 named BLE device
-        if (peripheral.name == "cyaBLE"){
+        if (peripheral.name == "cyaBle"){
             currentPeripheral = peripheral
         }
     }
