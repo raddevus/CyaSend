@@ -73,7 +73,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
             if let descriptors = characteristic.descriptors {
                 outputMessages.text += "DESCRIPTORS \(descriptors)\n"
             }
-            let outString = dataToSend
+            let outString = dataToSend + "\n"
             var data = outString.data(using: String.Encoding.ascii)
            
             for characteristic in service.characteristics! as [CBCharacteristic]{
@@ -109,9 +109,11 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
+        outputMessages.text += "Getting device...\n"
         // We only care about 1 named BLE device
-        if (peripheral.name == "cyaBle"){
+        if (peripheral.name == "CyaBle"){
             currentPeripheral = peripheral
+            outputMessages.text += "Got CyaBle\n"
         }
     }
     
@@ -145,7 +147,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     }
     
     @IBAction func sendKeys(sender: UIButton){
-        
+        outputMessages.text += "CyaBle connect...\n"
        centralManager?.connect(currentPeripheral, options: nil)
     }
 }
