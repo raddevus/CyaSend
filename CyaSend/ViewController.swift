@@ -114,6 +114,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         if (peripheral.name == "CyaBle"){
             currentPeripheral = peripheral
             outputMessages.text += "Got CyaBle\n"
+            central.stopScan()
         }
     }
     
